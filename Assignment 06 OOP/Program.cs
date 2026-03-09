@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assignment_06_OOP.BookingTicket;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Numerics;
@@ -136,18 +137,92 @@ namespace Assignment_06_OOP
 
 
 
+            Console.WriteLine("=== Cinema Opened ===");
+
+            
+
+            StandardTicket t1 = new StandardTicket("Inception", 80, "A5");
+            VIPTicket t2 = new VIPTicket("Avengers", 200, true, 50);
+            IMAXTicket t3 = new IMAXTicket("Dune", 130, true);
+
+            t1.Book();
+            t2.Book();
+            t3.Book();
+
+            Cinema cinema = new Cinema();
+
+            cinema.AddTicket(t1);
+            cinema.AddTicket(t2);
+            cinema.AddTicket(t3);
+
+            cinema.PrintTickets();
+
+            Console.WriteLine("\n--- Polymorphism ---");
+
+            Ticket[] tickets = { t1, t2, t3 };
+
+            foreach (var t in tickets)
+            {
+
+                Console.WriteLine($"{t.GetType().Name} => Final Price: {t.FinalPrice()}");
+
+            }
 
 
+            Console.WriteLine("\n--- Receipt ---");
+            Console.WriteLine(t2.Receipt());
 
 
+            Console.WriteLine("\n--- Total Revenue ---");
+            Console.WriteLine(tickets.TotalRevenue());
 
-
+            Console.WriteLine("=== Cinema Closed ===");
         }
 
 
 
-                
-      }
+
+
+    }
+
+
+    public static class TicketExtensions
+    {
+            public static string Receipt(this Ticket ticket)
+            {
+                return 
+                $@"========== RECEIPT ==========
+                  Movie   : {ticket.Movie}
+                  Type    : {ticket.GetType().Name}
+                  Price   : {ticket.Price}
+                  Final   : {ticket.FinalPrice()}
+                  Status  : {ticket.Status()}
+                  =============================";
+            }
+
+            public static double TotalRevenue(this Ticket[] tickets)
+            {
+
+                double total = 0;
+
+                foreach (var t in tickets)
+                {
+
+
+                    total += t.FinalPrice();
+
+
+                }
+
+                return total;
+
+            }
+    }
+
+
+
+
+    
 
 
 }
